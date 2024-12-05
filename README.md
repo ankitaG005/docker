@@ -36,6 +36,10 @@
 
 
 
+   cp target/*.war /temp/v-${BUILD_ID}_$(date +%Y%m%d%H%M%S).war
+
+
+
 
 
 
