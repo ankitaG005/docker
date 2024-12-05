@@ -31,6 +31,21 @@
    #hkhcoder/vrofile
    https://github.com/hkhcoder/vprofile-project.git
 
+   sudo docker build -t nodeproject .
+   sudo docker run -d --name nodeserver -p 3000:3000 nodeproject
+
+
+
+
+
+
+
+
+
+
+mkdir -p versions
+cp target/vprofile-v2.war versions/vprofile-V$BUILD_ID_$BUILD_TIMESTAMP.war
+
    #Ansible
    $ sudo apt update
    $ sudo apt install software-properties-common
