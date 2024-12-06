@@ -1169,3 +1169,274 @@ public class assQ4 {
 }
 
 -------------------------------------------------------------------------------------------------------------------
+import java.util.Scanner;
+
+// Define the BankAccount interface
+interface BankAccount {
+    void deposit(double amount);
+    void withdraw(double amount);
+}
+
+// The RealBankAccount class represents the actual bank account
+class RealBankAccount implements BankAccount {
+    private double balance;
+
+    public RealBankAccount(double initialBalance) {
+        this.balance = initialBalance;
+    }
+
+    @Override
+    public void deposit(double amount) {
+        balance += amount;
+        System.out.println("Deposited: $" + amount);
+    }
+
+    @Override
+    public void withdraw(double amount) {
+        if (balance >= amount) {
+            balance -= amount;
+            System.out.println("Withdrew: $" + amount);
+        } else {
+            System.out.println("Insufficient balance.");
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+
+// The BankAccountProxy class controls access to the RealBankAccount
+class BankAccountProxy implements BankAccount {
+    private RealBankAccount realAccount;
+
+    public BankAccountProxy(RealBankAccount realAccount) {
+        this.realAccount = realAccount;
+    }
+
+    @Override
+    public void deposit(double amount) {
+        realAccount.deposit(amount);
+    }
+
+    @Override
+    public void withdraw(double amount) {
+        if (realAccount.getBalance() >= amount) {
+            realAccount.withdraw(amount);
+        } else {
+            System.out.println("Insufficient balance.");
+        }
+    }
+}
+
+// Main class to handle user-defined input/output
+public class assQ4 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Ask user to set up an initial balance
+        System.out.print("Enter initial balance for your bank account: ");
+        double initialBalance = scanner.nextDouble();
+        RealBankAccount account = new RealBankAccount(initialBalance);
+        BankAccountProxy proxy = new BankAccountProxy(account);
+
+        while (true) {
+            // Display menu options
+            System.out.println("\nChoose an operation:");
+            System.out.println("1. Deposit Money");
+            System.out.println("2. Withdraw Money");
+            System.out.println("3. Check Balance");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter amount to deposit: ");
+                    double depositAmount = scanner.nextDouble();
+                    proxy.deposit(depositAmount);
+                    break;
+
+                case 2:
+                    System.out.print("Enter amount to withdraw: ");
+                    double withdrawAmount = scanner.nextDouble();
+                    proxy.withdraw(withdrawAmount);
+                    break;
+
+                case 3:
+                    System.out.println("Current balance: $" + account.getBalance());
+                    break;
+
+                case 4:
+                    System.out.println("Exiting. Thank you for using the bank system.");
+                    scanner.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Ass 3
+* Tax
+
+import java.util.Scanner;
+
+public class Q1 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Get product details from the user
+        System.out.print("Enter the product name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter the product price: ");
+        double price = scanner.nextDouble();
+
+        System.out.print("Enter the product category (e.g., food, electronics, etc.): ");
+        scanner.nextLine(); // Consume the leftover newline
+        String category = scanner.nextLine();
+
+        // Create a Product object using user inputs
+        Product product = new Product(name, price, category);
+
+        // Calculate the tax for the product
+        double tax = TaxCalculator.calculateTax(product);
+        System.out.printf("The tax for the product %s is: $%.2f%n", product.getName(), tax);
+
+        scanner.close(); // Close the scanner
+    }
+}
+
+// Class responsible for holding product information
+class Product {
+    private String name;
+    private double price;
+    private String category;
+
+    public Product(String name, double price, String category) {
+        this.name = name;
+        this.price = price;
+        this.category = category;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+}
+
+// Class responsible for calculating tax
+class TaxCalculator {
+    public static double calculateTax(Product product) {
+        switch (product.getCategory().toLowerCase()) {
+            case "food":
+                return product.getPrice() * 0.05; // 5% tax for food
+            case "electronics":
+                return product.getPrice() * 0.18; // 18% tax for electronics
+            default:
+                return product.getPrice() * 0.1; // 10% tax for other categories
+        }
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Ass 3 
+* Copy
+
+import java.util.Scanner;
+
+// Interface for all shapes
+interface MyShape {
+    MyShape makeCopy(); // Method to create a copy of the shape
+    void display();     // Method to display the shape's details
+}
+
+// Circle class implementing MyShape interface
+class MyCircle implements MyShape {
+    private int radius;
+
+    // Constructor to set the radius of the circle
+    public MyCircle(int radius) {
+        this.radius = radius;
+    }
+
+    // Method to create a copy of the Circle
+    @Override
+    public MyShape makeCopy() {
+        return new MyCircle(this.radius); // Return a new Circle with the same radius
+    }
+
+    // Method to display the Circle details
+    @Override
+    public void display() {
+        System.out.println("MyCircle: Radius = " + radius);
+    }
+}
+
+// Rectangle class implementing MyShape interface
+class MyRectangle implements MyShape {
+    private int width, height;
+
+    // Constructor to set the dimensions of the rectangle
+    public MyRectangle(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    // Method to create a copy of the Rectangle
+    @Override
+    public MyShape makeCopy() {
+        return new MyRectangle(this.width, this.height); // Return a new Rectangle with the same dimensions
+    }
+
+    // Method to display the Rectangle details
+    @Override
+    public void display() {
+        System.out.println("MyRectangle: Width = " + width + ", Height = " + height);
+    }
+}
+
+// Main class to test the user-defined shapes
+public class Q3 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Take input for Circle
+        System.out.print("Enter radius of the Circle: ");
+        int circleRadius = scanner.nextInt();
+        MyShape originalCircle = new MyCircle(circleRadius);
+
+        // Take input for Rectangle
+        System.out.print("Enter width of the Rectangle: ");
+        int rectWidth = scanner.nextInt();
+        System.out.print("Enter height of the Rectangle: ");
+        int rectHeight = scanner.nextInt();
+        MyShape originalRectangle = new MyRectangle(rectWidth, rectHeight);
+
+        // Create copies of the shapes
+        MyShape copiedCircle = originalCircle.makeCopy();
+        MyShape copiedRectangle = originalRectangle.makeCopy();
+
+        // Display details of original shapes
+        System.out.println("\nOriginal Shapes:");
+        originalCircle.display();
+        originalRectangle.display();
+
+        // Display details of copied shapes
+        System.out.println("\nCopied Shapes:");
+        copiedCircle.display();
+        copiedRectangle.display();
+
+        scanner.close();
+    }
+}
